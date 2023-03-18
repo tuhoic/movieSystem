@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.moviesystem.mapper.MovieMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.example.moviesystem.pojo.Movie">
+        <id column="id" property="id" />
+        <result column="title" property="title" />
+        <result column="director" property="director" />
+        <result column="cast" property="cast" />
+        <result column="duration" property="duration" />
+        <result column="genre" property="genre" />
+        <result column="release_date" property="releaseDate" />
+        <result column="rating" property="rating" />
+        <result column="poster" property="poster" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        id, title, director, cast, duration, genre, release_date, rating, poster
+    </sql>
+
+</mapper>
