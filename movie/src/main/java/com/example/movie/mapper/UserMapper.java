@@ -1,6 +1,6 @@
 package com.example.movie.mapper;
 
-import com.example.movie.pojo.Review;
+import com.example.movie.pojo.User;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 
 /**
@@ -10,6 +10,6 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
  *
  * @author wuMing
  */
-public interface ReviewMapper extends BaseMapper<Review> {
+public interface UserMapper extends BaseMapper<User> {
 
 }

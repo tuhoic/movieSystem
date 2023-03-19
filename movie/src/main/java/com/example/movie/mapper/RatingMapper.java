@@ -1,6 +1,6 @@
 package com.example.movie.mapper;
 
-import com.example.moviesystem.pojo.Rating;
+import com.example.movie.pojo.Rating;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 
 /**

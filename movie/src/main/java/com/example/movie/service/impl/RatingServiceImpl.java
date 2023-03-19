@@ -1,8 +1,8 @@
 package com.example.movie.service.impl;
 
-import com.example.moviesystem.pojo.Rating;
-import com.example.moviesystem.mapper.RatingMapper;
-import com.example.moviesystem.service.RatingService;
+import com.example.movie.pojo.Rating;
+import com.example.movie.mapper.RatingMapper;
+import com.example.movie.service.RatingService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.springframework.stereotype.Service;
 

@@ -1,6 +1,6 @@
 package com.example.movie.service;
 
-import com.example.movie.pojo.Movie;
+import com.example.movie.pojo.Rating;
 import com.baomidou.mybatisplus.extension.service.IService;
 
 /**
@@ -11,6 +11,6 @@ import com.baomidou.mybatisplus.extension.service.IService;
  * @author wuMing
  * @since 2023-03-18
  */
-public interface MovieService extends IService<Movie> {
+public interface RatingService extends IService<Rating> {
 
 }
