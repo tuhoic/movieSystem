@@ -5,7 +5,8 @@ CREATE TABLE IF NOT EXISTS user (
     id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
     username VARCHAR(255) NOT NULL UNIQUE,
     password VARCHAR(255) NOT NULL,
-    email VARCHAR(255) NOT NULL UNIQUE
+    email VARCHAR(255) NOT NULL UNIQUE,
+    head_portrait VARCHAR(255) NOT NULL DEFAULT "default/image.jpg"
 );
 
 CREATE TABLE IF NOT EXISTS movie (
@@ -17,7 +18,10 @@ CREATE TABLE IF NOT EXISTS movie (
     genre VARCHAR(255),
     release_date DATE,
     rating FLOAT,
-    poster VARCHAR(255)
+    cover_url VARCHAR(255),
+    full_size_cover_url VARCHAR(255),
+    country VARCHAR(255),
+    writer text
 );
 
 CREATE TABLE IF NOT EXISTS rating (
@@ -30,7 +34,7 @@ CREATE TABLE IF NOT EXISTS rating (
     UNIQUE (user_id, movie_id)
 );
 
-CREATE TABLE IF NOT EXISTS review (
+CREATE TABLE IF NOT EXISTS comment (
     id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
     user_id INT NOT NULL,
     movie_id INT NOT NULL,

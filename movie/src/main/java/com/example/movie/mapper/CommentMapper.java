@@ -1,9 +1,16 @@
 package com.example.movie.mapper;
 
-import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.example.movie.entity.Comment;
-import org.apache.ibatis.annotations.Mapper;
+import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 
-@Mapper
+/**
+ * <p>
+ *  Mapper 接口
+ * </p>
+ *
+ * @author Your Name
+ * @since 2023-03-19
+ */
 public interface CommentMapper extends BaseMapper<Comment> {
+
 }

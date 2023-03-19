@@ -1,6 +1,6 @@
 package com.example.movie.service;
 
-import com.example.movie.pojo.User;
+import com.example.movie.entity.User;
 import com.baomidou.mybatisplus.extension.service.IService;
 
 /**
@@ -8,8 +8,8 @@ import com.baomidou.mybatisplus.extension.service.IService;
  *  服务类
  * </p>
  *
- * @author wuMing
- * @since 2023-03-18
+ * @author Your Name
+ * @since 2023-03-19
  */
 public interface UserService extends IService<User> {
 

@@ -1,6 +1,6 @@
 package com.example.movie.mapper;
 
-import com.example.movie.pojo.Movie;
+import com.example.movie.entity.Movie;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 
 /**
@@ -8,7 +8,8 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
  *  Mapper 接口
  * </p>
  *
- * @author wuMing
+ * @author Your Name
+ * @since 2023-03-19
  */
 public interface MovieMapper extends BaseMapper<Movie> {
 
