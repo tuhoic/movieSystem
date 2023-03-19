@@ -13,7 +13,7 @@ const getters = {
 const actions = {
     async login({ commit }) {
       try {
-          const response = await axios.get('/api/users/me')
+          const response = await axios.get('/api/users/login')
           commit('SET_USER', response.data)
       }  catch (error) {
           console.log(error)
@@ -39,6 +39,5 @@ export default {
     state,
     getters,
     actions,
-    mutations,
-    namespaces: true
+    mutations
 }
