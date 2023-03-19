@@ -1,13 +1,15 @@
 import axios from 'axios'
 
+axios.defaults.baseURL = 'http://localhost:8000'
+
 const state = {
     isAuthenticated: false,
     user: null
 }
 
 const getters = {
-    getIsAuthenticated: state => state.isAuthenticated,
-    getUser: state => state.user
+    isAuthenticated: state => state.isAuthenticated,
+    user: state => state.user
 }
 
 const actions = {
@@ -39,5 +41,6 @@ export default {
     state,
     getters,
     actions,
-    mutations
+    mutations,
+    namespaces: true
 }

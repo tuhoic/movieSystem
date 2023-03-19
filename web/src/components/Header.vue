@@ -12,7 +12,7 @@
       <div v-else>
         <img class="avatar" :src="user.headPortrait">
         <span class="username">{{ user.username }}</span>
-        <div class="user-panel" v-show="showPanel">
+        <div class="user-panel" v-show="showPanel" @click="togglePanel">
           <router-link to="/profile">Profile</router-link>
           <a href="#" @click="logout">Logout</a>
         </div>
@@ -32,8 +32,8 @@ export default {
     }
   },
   computed: {
-    ...mapGetters('auth/', ['isAuthenticated', 'user']),
-    ...mapGetters('auth/', ['user', 'user']),
+    ...mapGetters('auth', ['isAuthenticated', 'user']),
+    ...mapGetters('auth', ['user', 'user']),
   },
   methods: {
     ...mapActions('auth', ['logout']),
