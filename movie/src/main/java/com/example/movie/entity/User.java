@@ -1,6 +1,7 @@
 package com.example.movie.entity;
 
 import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import java.io.Serializable;
 import lombok.Data;
@@ -10,9 +11,6 @@ import lombok.EqualsAndHashCode;
  * <p>
  * 
  * </p>
- *
- * @author Your Name
- * @since 2023-03-19
  */
 @Data
   @EqualsAndHashCode(callSuper = false)
@@ -29,7 +27,6 @@ import lombok.EqualsAndHashCode;
 
     private String email;
 
+    @TableField(value = "head_portrait")
     private String headPortrait;
-
-
 }

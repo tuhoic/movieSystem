@@ -10,12 +10,19 @@
     <div class="login">
       <router-link v-if="!isAuthenticated" to="/login">Login</router-link>
       <div v-else>
-        <img class="avatar" :src="user.headPortrait">
-        <span class="username">{{ user.username }}</span>
-        <div class="user-panel" v-show="showPanel" @click="togglePanel">
-          <router-link to="/profile">Profile</router-link>
-          <a href="#" @click="logout">Logout</a>
-        </div>
+        <el-dropdown>
+          <span class="el-dropdown-link" @mouseover="showMenu = true" @mouseleave="showMenu = false">
+            <img class="avatar" :src="user.headPortrait" alt="用户头像">
+          </span>
+          <template v-slot:dropdown>
+            <el-dropdown-menu>
+              <el-dropdown-item command="profile">
+                <router-link to="/profile">Profile</router-link>
+              </el-dropdown-item>
+              <el-dropdown-item @click="Logout" divided>Logout</el-dropdown-item>
+            </el-dropdown-menu>
+          </template>
+        </el-dropdown>
       </div>
     </div>
   </div>
@@ -28,7 +35,7 @@ export default {
   data() {
     return {
       searchText: "",
-      showPanel: false
+      showMenu: false
     }
   },
   computed: {
@@ -37,15 +44,13 @@ export default {
   },
   methods: {
     ...mapActions('auth', ['logout']),
+    ...mapActions('movies', ['searchMovies']),
     search() {
-      this.$router.push({ path: '/search', query: { q: this.searchText } })
+      this.searchMovies(this.searchText);
     },
-    togglePanel() {
-      this.showPanel = !this.showPanel
-    },
-    logout() {
-      this.logout() // 调用auth.js中定义的logout action
-    },
+    Logout() {
+      this.logout()
+    }
   }
 }
 </script>
@@ -122,5 +127,11 @@ export default {
 
 .user-panel.show {
   display: flex;
+}
+
+.el-dropdown-menu {
+  width: 150px;
+  height: 200px;
+  color: #007bff;
 }
 </style>

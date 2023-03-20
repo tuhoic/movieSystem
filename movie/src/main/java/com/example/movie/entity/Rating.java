@@ -10,9 +10,6 @@ import lombok.EqualsAndHashCode;
  * <p>
  * 
  * </p>
- *
- * @author Your Name
- * @since 2023-03-19
  */
 @Data
   @EqualsAndHashCode(callSuper = false)

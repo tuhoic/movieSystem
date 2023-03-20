@@ -6,6 +6,7 @@
         {{ movie.title }}
       </li>
     </ul>
+    <button @click="loadNextPage">Load more movies</button>
   </div>
 </template>
 
@@ -21,7 +22,11 @@ export default {
     this.fetchMovies()
   },
   methods: {
-    ...mapActions('movies', ['fetchMovies'])
+    ...mapActions('movies', ['fetchMovies']),
+    loadNextPage() {
+      const currentPage = this.movies.length / 10 + 1 // 每页 10 条数据
+      this.fetchMovies(currentPage)
+    }
   }
 }
 </script>
