@@ -13,8 +13,10 @@ import java.util.Map;
 @Component
 public class JwtTokenUtil {
 
-    @Value("${jwt.secret}")
-    private String secret;
+    // 注入失败
+//    @Value("${jwt.secret}")
+//    private String secret;
+    private final String secret = "cca795e051ef4f0996ebc063fbf12aab";
 
     private static final long EXPIRATION_TIME = 24 * 60 * 60 * 1000L; // 24 hours
 

@@ -1,7 +1,5 @@
 import axios from 'axios'
 
-// axios.defaults.baseURL = 'http://localhost:8000'
-
 const state = {
     movies: []
 }
@@ -11,13 +9,13 @@ const getters = {
 }
 
 const actions = {
-    async fetchMovies({ commit }) {
-        const response = await axios.get('/api/movies')
-        commit('setMovies', response.data)
+    async fetchMovies({ commit }, page) {
+        const response = await axios.get(`/movie/page?current=${page.current}&pageSize=${page.size}`)
+        commit('setMovies', response.data.data.records)
     },
     async searchMovies({ commit }, searchQuery) {
-        const response = await axios.get(`/api/movies?title=${searchQuery}`)
-        commit('setMovies', response.data)
+        const response = await axios.get(`/movies/search?title=${searchQuery}`)
+        commit('setMovies', response.data.data)
     }
 }
 

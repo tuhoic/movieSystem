@@ -81,7 +81,8 @@ public class UserController {
     }
 
     @GetMapping("/info")
-    public ResponseData<User> getInfo(@RequestHeader("Authorization") String authHeader) {
+    public ResponseData<User> getInfo(HttpServletRequest httpServletRequest) {
+        String authHeader = httpServletRequest.getHeader("Authorization");
         String token = authHeader.substring(7);
         String username = jwtTokenUtil.getUsernameFromToken(token);
         QueryWrapper<User> queryWrapper = new QueryWrapper<>();

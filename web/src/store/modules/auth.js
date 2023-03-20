@@ -15,11 +15,8 @@ const actions = {
     async login({ commit }, loginForm) {
         try {
             const response = await axios.post('/user/login', loginForm)
-            console.log(loginForm.username)
-            console.log(loginForm.password)
             if (response.data.code === 200) {
                 const token = response.data.data
-                console.log(token)
                 localStorage.setItem('token', token) // 将token存储在本地
                 axios.defaults.headers.common['Authorization'] = `Bearer ${token}` // 设置axios默认请求头
                 const userResponse = await axios.get('/user/info') // 根据token获取用户信息
@@ -41,11 +38,11 @@ const actions = {
 
     async logout({ commit}) {
         try {
-            await axios.post('/api/logout');
+            await axios.post('/user/logout');
             commit('LOGOUT_USER', null)
             localStorage.removeItem('token'); // 移除本地存储的 token
             delete axios.defaults.headers.common['Authorization']; // 删除 axios 的默认请求头中的 token
-            router.push("/")
+            await router.push("/")
         } catch (error) {
             console.log(error);
         }
