@@ -1,5 +1,5 @@
-import axios from 'axios'
 import router from "@/router";
+import axios from "axios";
 
 const state = {
     isAuthenticated: false,
@@ -45,6 +45,24 @@ const actions = {
             await router.push("/")
         } catch (error) {
             console.log(error);
+        }
+    },
+
+    async register({ commit }, registerForm) {
+        console.log(registerForm.username)
+        console.log(registerForm.email)
+        console.log(registerForm.password)
+        commit.data
+        try {
+            const response = await axios.post('/user/register', registerForm)
+            if (response.data.code === 200) {
+                alert("注册成功!我们将在5s内跳到登陆页面!")
+                await router.push("/login")
+            } else {
+                alert(response.data.message)
+            }
+        }catch (error) {
+            console.log(error)
         }
     }
 }

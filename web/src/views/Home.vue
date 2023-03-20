@@ -1,49 +1,85 @@
 <template>
   <div>
     <h1>Movie List</h1>
-    <ul>
-      <li v-for="movie in movies" :key="movie.id">
+    <ul class="movie-list">
+      <li v-for="movie in displayedMovies" :key="movie.id" class="movie-item">
         <div>
-          {{ movie.title }}
-          {{ movie.director }}
-          {{ movie.cast }}
-          {{ movie.duration }}
-          {{ movie.genre }}
-          {{ movie.release_date }}
-          <img src= "`${movie.coverUrl}`">
+          <router-link :to="{ name: 'MovieDetails', params: { id: movie.id }}">
+            <img :src="movie.coverUrl" alt="movie cover">
+          </router-link>
+          <div class="movie-details">
+            <p>{{ movie.title }}</p>
+            <p>{{ movie.director }}</p>
+            <p>{{ movie.cast }}</p>
+            <p>{{ movie.duration }}</p>
+            <p>{{ movie.genre }}</p>
+            <p>{{ movie.release_date }}</p>
+          </div>
         </div>
       </li>
     </ul>
-    <button @click="loadNextPage">Load more movies</button>
+    <div class="pagination">
+      <button @click="loadPreviousPage" :disabled="isFirstPage">Previous</button>
+      <span>Page {{ currentPage }} of {{ totalPages }}</span>
+      <button @click="loadNextPage" :disabled="isLastPage">Next</button>
+    </div>
   </div>
 </template>
 
 <script>
-import { mapGetters, mapActions } from 'vuex'
-import store from "@/store";
-
 export default {
-  name: 'HomePage',
+  name:"HomePage",
   data() {
     return {
-      page: {
-        current: 1,
-        size: 20
-      }
-    }
+      movies: [], // 所有电影
+      currentPage: 1, // 当前页码
+      pageSize: 10 // 每页显示的电影数量
+    };
   },
   computed: {
-    ...mapGetters('movies', ['movies'])
-  },
-  mounted() {
-    this.fetchMovies(this.page)
+    displayedMovies() {
+      const startIndex = (this.currentPage - 1) * this.pageSize;
+      const endIndex = startIndex + this.pageSize;
+      return this.movies.slice(startIndex, endIndex);
+    },
+    totalPages() {
+      return Math.ceil(this.movies.length / this.pageSize);
+    },
+    isFirstPage() {
+      return this.currentPage === 1;
+    },
+    isLastPage() {
+      return this.currentPage === this.totalPages;
+    }
   },
   methods: {
-    ...mapActions('movies', ['fetchMovies']),
+    loadPreviousPage() {
+      this.currentPage -= 1;
+    },
     loadNextPage() {
-      this.page.current ++
-      store.dispatch("movies/fetchMovies", this.page)
+      this.currentPage += 1;
     }
   }
-}
+};
 </script>
+
+<style>
+.movie-list {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+}
+
+.movie-item {
+  width: 45%;
+  margin-bottom: 20px;
+}
+
+.movie-details {
+  margin-top: 10px;
+}
+
+.pagination {
+  margin-top: 20px;
+}
+</style>

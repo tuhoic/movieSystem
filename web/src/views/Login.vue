@@ -10,9 +10,7 @@
       </el-form-item>
       <el-form-item>
         <el-button type="primary" @click="handleLogin">登录</el-button>
-        <el-button>
-          <router-link to="/register" class="register-link">去注册</router-link>
-        </el-button>
+        <el-button type="primary" @click="toRegister">没有账号？</el-button>
       </el-form-item>
     </el-form>
   </div>
@@ -20,6 +18,7 @@
 
 <script>
 import { mapActions } from 'vuex';
+import router from "@/router";
 
 export default {
   name: 'LoginPage',
@@ -46,20 +45,31 @@ export default {
         }
       });
     },
+    toRegister() {
+      router.push("/register")
+    }
   },
 };
 </script>
 
 <style scoped>
 .login-container {
-  margin: 50px auto;
-  width: 400px;
-  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+  /*background-image: url("image.jpg");*/
+  background-repeat: no-repeat;
+  background-size: cover;
 }
+
 .login-form {
   margin-top: 50px;
-}
-.register-link {
-  margin-left: 20px;
+  max-width: 400px;
+  width: 100%;
+  background-color: rgba(255, 255, 255, 0.8);
+  padding: 20px;
+  border-radius: 5px;
 }
 </style>

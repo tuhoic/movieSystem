@@ -9,6 +9,8 @@ import axios from "axios";
 axios.defaults.baseURL = 'http://localhost:8000'
 
 const app = createApp(App)
+app.config.globalProperties.$axios = axios
+
 app.use(ElementPlus)
 app.use(router)
 app.use(store)

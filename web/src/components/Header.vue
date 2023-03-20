@@ -1,21 +1,23 @@
 <template>
   <div class="top-bar">
     <div class="logo">
-      <router-link to="/">Movie System</router-link>
+      <router-link to="/">
+        <img src="Header.vue">
+      </router-link>
     </div>
     <div class="search-box">
       <input type="text" placeholder="Search movie title" v-model="searchText">
       <button @click="search">Search</button>
     </div>
     <div class="login">
-      <router-link v-if="!isAuthenticated" to="/login">Login</router-link>
+      <router-link v-if="!isAuthenticated" to="/login">登录</router-link>
       <div v-else>
         <el-dropdown>
           <span class="el-dropdown-link" @mouseover="showMenu = true" @mouseleave="showMenu = false">
             <img class="avatar" :src="user.headPortrait" alt="用户头像">
           </span>
           <template v-slot:dropdown>
-            <el-dropdown-menu>
+            <el-dropdown-menu class="el-dropdown-menu">
               <el-dropdown-item command="profile">
                 <router-link to="/profile">Profile</router-link>
               </el-dropdown-item>

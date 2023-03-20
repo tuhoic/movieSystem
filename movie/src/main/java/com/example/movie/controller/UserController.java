@@ -73,6 +73,10 @@ public class UserController {
 
         // 注册
         boolean save = userService.save(requestUser);
+        System.out.println(requestUser.getUsername());
+        System.out.println(requestUser.getEmail());
+        System.out.println(requestUser.getPassword());
+
         if (!save) {
             return ResponseData.failed(ResultCode.FAILED, "未知错误，请重试！");
         } else {
