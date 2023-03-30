@@ -1,85 +1,109 @@
 <template>
-  <div>
-    <h1>Movie List</h1>
-    <ul class="movie-list">
-      <li v-for="movie in displayedMovies" :key="movie.id" class="movie-item">
-        <div>
-          <router-link :to="{ name: 'MovieDetails', params: { id: movie.id }}">
-            <img :src="movie.coverUrl" alt="movie cover">
-          </router-link>
-          <div class="movie-details">
-            <p>{{ movie.title }}</p>
-            <p>{{ movie.director }}</p>
-            <p>{{ movie.cast }}</p>
-            <p>{{ movie.duration }}</p>
-            <p>{{ movie.genre }}</p>
-            <p>{{ movie.release_date }}</p>
-          </div>
-        </div>
-      </li>
-    </ul>
-    <div class="pagination">
-      <button @click="loadPreviousPage" :disabled="isFirstPage">Previous</button>
-      <span>Page {{ currentPage }} of {{ totalPages }}</span>
-      <button @click="loadNextPage" :disabled="isLastPage">Next</button>
+  <top-bar></top-bar>
+  <div class="movies">
+    <div class="movies-list">
+      <div v-for="movie in movies" :key="movie.id" class="movies-list-item">
+        <router-link :to="'/movie/' + movie.id">
+          <img :src="`/api/` + movie.fullSizeCoverUrl" @error=setDefaultImage alt="movie cover" />
+          <p style="color: #333333">{{ movie.title }}</p>
+        </router-link>
+      </div>
+    </div>
+    <div class="movies-pagination">
+      <el-pagination
+          :current-page="currentPage"
+          :page-size="pageSize"
+          :total="total"
+          @current-change="handleCurrentPage"
+      />
     </div>
   </div>
 </template>
 
 <script>
+import axios from "axios";
+import { ElPagination} from "element-plus";
+import TopBar from "@/components/Header.vue";
+import {mapActions, mapGetters} from "vuex";
+
 export default {
-  name:"HomePage",
+  name: "HomePage",
+  components: {
+    TopBar,
+    ElPagination: ElPagination,
+  },
   data() {
     return {
-      movies: [], // 所有电影
-      currentPage: 1, // 当前页码
-      pageSize: 10 // 每页显示的电影数量
+      // movies: [],
+      // currentPage: 1,
+      // pageSize: 20,
+      // total: 0,
+      defaultImage: "api/default.jpg",
     };
   },
   computed: {
-    displayedMovies() {
-      const startIndex = (this.currentPage - 1) * this.pageSize;
-      const endIndex = startIndex + this.pageSize;
-      return this.movies.slice(startIndex, endIndex);
-    },
-    totalPages() {
-      return Math.ceil(this.movies.length / this.pageSize);
-    },
-    isFirstPage() {
-      return this.currentPage === 1;
-    },
-    isLastPage() {
-      return this.currentPage === this.totalPages;
-    }
+    ...mapGetters("movies", ["movies", "currentPage", "pageSize", "total"])
   },
   methods: {
-    loadPreviousPage() {
-      this.currentPage -= 1;
+    ...mapActions("movies", ["fetchMovies", "handleCurrentChange", "searchMovies"]),
+    fetchData() {
+      axios.get("/movie/list", {
+            params: {
+              current: this.currentPage,
+              size: this.pageSize,
+            },
+          })
+          .then((response) => {
+            this.movies = response.data.data.records;
+            this.total = response.data.data.total;
+          })
+          .catch((error) => {
+            console.error(error);
+          });
     },
-    loadNextPage() {
-      this.currentPage += 1;
+    handleCurrentPage(currentPage) {
+      this.handleCurrentChange(currentPage)
+      this.fetchMovies();
+      // this.fetchData();
+    },
+    setDefaultImage(event) {
+      event.target.src = this.defaultImage
     }
-  }
+  },
+  created() {
+    // this.searchMovies()
+    this.fetchMovies();
+    // this.fetchData();
+  },
 };
 </script>
 
-<style>
-.movie-list {
+<style scoped>
+.movies {
   display: flex;
-  flex-wrap: wrap;
-  justify-content: space-between;
+  flex-direction: column;
+  align-items: center;
 }
 
-.movie-item {
-  width: 45%;
-  margin-bottom: 20px;
+.movies-list {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 10px;
 }
 
-.movie-details {
+.movies-list-item {
+  text-align: center;
+  height: 500px;
+}
+
+.movies-list-item img {
+  width: 100%;
+  height: 80%;
+  object-fit: cover;
+}
+
+.movies-list-item p {
   margin-top: 10px;
 }
 
-.pagination {
-  margin-top: 20px;
-}
 </style>

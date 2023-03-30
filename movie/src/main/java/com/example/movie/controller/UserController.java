@@ -99,5 +99,26 @@ public class UserController {
             return ResponseData.failed(ResultCode.UNAUTHORIZED, "用户不存在或已被删除!");
         }
     }
+
+    @PostMapping("/modification")
+    public ResponseData<User> modification(@RequestBody User requeseUser) {
+        QueryWrapper<User> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq("username", requeseUser.getUsername());
+        queryWrapper.eq("email", requeseUser.getEmail());
+
+        User user = userService.getOne(queryWrapper);
+        System.out.println(requeseUser);
+        System.out.println(user);
+        if (user == null) {
+            return ResponseData.failed(ResultCode.FAILED, "用户不存在或注册邮箱不对!");
+        }
+
+        user.setPassword(requeseUser.getPassword());
+        boolean isUpdate = userService.updateById(user);
+        if (!isUpdate) {
+            return ResponseData.failed(ResultCode.FAILED, "发生未知错误，请重试!");
+        }
+        return ResponseData.success();
+    }
 }
 

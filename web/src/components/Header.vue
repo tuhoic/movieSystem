@@ -1,27 +1,23 @@
 <template>
   <div class="top-bar">
     <div class="logo">
-      <router-link to="/">
-        <img src="Header.vue">
-      </router-link>
+      <router-link to="/">电影系统</router-link>
     </div>
     <div class="search-box">
-      <input type="text" placeholder="Search movie title" v-model="searchText">
-      <button @click="search">Search</button>
+      <input type="text" placeholder="Search movie title" v-model="title" @keyup.enter="search">
+      <button @click="search">搜索</button>
     </div>
     <div class="login">
       <router-link v-if="!isAuthenticated" to="/login">登录</router-link>
       <div v-else>
         <el-dropdown>
           <span class="el-dropdown-link" @mouseover="showMenu = true" @mouseleave="showMenu = false">
-            <img class="avatar" :src="user.headPortrait" alt="用户头像">
+            <img class="avatar" :src="`/api/` + user.headPortrait" @error="setDefaultImage" alt="用户头像">
           </span>
           <template v-slot:dropdown>
             <el-dropdown-menu class="el-dropdown-menu">
-              <el-dropdown-item command="profile">
-                <router-link to="/profile">Profile</router-link>
-              </el-dropdown-item>
-              <el-dropdown-item @click="Logout" divided>Logout</el-dropdown-item>
+              <el-dropdown-item @click="toProfile" divided>个人信息</el-dropdown-item>
+              <el-dropdown-item @click="Logout" divided>退出</el-dropdown-item>
             </el-dropdown-menu>
           </template>
         </el-dropdown>
@@ -31,28 +27,39 @@
 </template>
 <script>
 import { mapActions, mapGetters } from 'vuex'
+import router from "@/router";
 
 export default {
   name: 'top-bar',
   data() {
     return {
-      searchText: "",
-      showMenu: false
+      title: "",
+      showMenu: false,
+      defaultImage: "api/headPortrait.jpg"
     }
   },
   computed: {
     ...mapGetters('auth', ['isAuthenticated', 'user']),
-    ...mapGetters('auth', ['user', 'user']),
   },
   methods: {
-    ...mapActions('auth', ['logout']),
-    ...mapActions('movies', ['searchMovies']),
+    ...mapActions('auth', ['logout', 'init']),
+    ...mapActions('movies', ["fetchMovies", 'searchMovies']),
     search() {
-      this.searchMovies(this.searchText);
+      this.searchMovies(this.title);
+      this.fetchMovies();
+    },
+    toProfile() {
+      router.push("/profile")
     },
     Logout() {
       this.logout()
+    },
+    setDefaultImage(event) {
+      event.target.src = this.defaultImage
     }
+  },
+  mounted() {
+
   }
 }
 </script>
@@ -61,7 +68,7 @@ export default {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 10px;
+  padding: 20px;
   background-color: #f1f1f1;
   border-bottom: 1px solid #ddd;
 }
@@ -69,13 +76,8 @@ export default {
 .logo {
   font-size: 24px;
   font-weight: bold;
-  color: #007bff;
 }
 
-.nav {
-  display: flex;
-  align-items: center;
-}
 
 .nav a {
   margin-left: 20px;
@@ -99,20 +101,6 @@ export default {
   border-radius: 50%;
 }
 
-.user-panel {
-  position: absolute;
-  top: 100%;
-  right: 0;
-  z-index: 1;
-  display: flex;
-  flex-direction: column;
-  background-color: #fff;
-  border: 1px solid #ddd;
-  border-top: none;
-  padding: 10px;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-}
-
 .user-panel a {
   color: #333;
   text-decoration: none;
@@ -127,9 +115,6 @@ export default {
   border-top: 1px solid #ddd;
 }
 
-.user-panel.show {
-  display: flex;
-}
 
 .el-dropdown-menu {
   width: 150px;

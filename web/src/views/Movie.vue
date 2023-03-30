@@ -1,5 +1,5 @@
 <template>
-  <p></p>
+  <p>welcome to china</p>
 </template>
 
 <script>

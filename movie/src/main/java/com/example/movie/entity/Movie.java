@@ -1,11 +1,11 @@
 package com.example.movie.entity;
 
 import com.baomidou.mybatisplus.annotation.IdType;
-import java.time.LocalDate;
 import com.baomidou.mybatisplus.annotation.TableId;
-import java.io.Serializable;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+
+import java.io.Serializable;
 
 /**
  * <p>
@@ -31,7 +31,7 @@ import lombok.EqualsAndHashCode;
 
     private String genre;
 
-    private LocalDate releaseDate;
+    private String releaseDate;
 
     private Float rating;
 

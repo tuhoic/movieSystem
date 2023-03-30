@@ -1,6 +1,6 @@
 <template>
   <div class="register-container">
-    <h2>用户注册</h2>
+    <h1 style="color: #007bff">用户注册</h1>
     <el-form :model="registerForm" :rules="registerRules" ref="registerForm" label-width="80px" class="register-form">
       <el-form-item label="用户名" prop="username">
         <el-input v-model="registerForm.username" placeholder="请输入用户名"></el-input>
@@ -85,18 +85,19 @@ export default {
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  height: 100vh;
-  /*background-image: url("image.jpg");*/
+  height: 80vh;
+  /*background-image: "./ass";*/
   background-repeat: no-repeat;
   background-size: cover;
 }
 
 .register-form {
-  margin-top: 50px;
+  margin-top: 15px;
   max-width: 400px;
   width: 100%;
   background-color: rgba(255, 255, 255, 0.8);
   padding: 20px;
-  border-radius: 5px;
+  border-radius: 20px;
+  border: 1px solid #ccc;
 }
 </style>

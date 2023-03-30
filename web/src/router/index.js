@@ -7,9 +7,9 @@ const routes = [
         component: () => import('../views/Home.vue')
     },
     {
-        path: '/movies',
-        name: 'Movies',
-        component: () => import('../views/Movies.vue')
+        path: '/movie',
+        name: 'Movie',
+        component: () => import('../views/Movie.vue')
     },
     {
         path: '/movies/:id',
@@ -30,6 +30,11 @@ const routes = [
         path: "/profile",
         name: 'Profile',
         component: () => import('../views/Profile.vue')
+    },
+    {
+        path: "/modification",
+        name: "Modification",
+        component: () => import('../views/Modification.vue')
     }
 ]
 
