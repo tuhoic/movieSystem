@@ -22,18 +22,11 @@ const actions = {
         commit('setTotal', response.data.data.total)
     },
     async searchMovies({ commit }, searchQuery) {
-        // const response = await axios.get(`/movie/search?title=${searchQuery}&current=${state.currentPage}&pageSize=${state.pageSize}`)
-        // commit('setMovies', response.data.data.records)
         commit('setSearchTitle', searchQuery)
         commit('setCurrentPage', 1)
-        // await this.fetchMovies(commit)
-        // commit('setTotal', response.data.data.total)
     },
     async handleCurrentChange({ commit }, currentPage) {
         commit('setCurrentPage', currentPage);
-        // const response = await axios.get(`/movie/list?current=${state.currentPage}&size=${state.pageSize}`)
-        // commit('setMovies', response.data.data.records)
-        // await this.fetchMovies(commit)
     }
 }
 

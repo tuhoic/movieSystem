@@ -21,7 +21,6 @@
 </template>
 
 <script>
-import axios from "axios";
 import { ElPagination} from "element-plus";
 import TopBar from "@/components/Header.vue";
 import {mapActions, mapGetters} from "vuex";
@@ -32,49 +31,22 @@ export default {
     TopBar,
     ElPagination: ElPagination,
   },
-  data() {
-    return {
-      // movies: [],
-      // currentPage: 1,
-      // pageSize: 20,
-      // total: 0,
-      defaultImage: "api/default.jpg",
-    };
-  },
   computed: {
     ...mapGetters("movies", ["movies", "currentPage", "pageSize", "total"])
   },
   methods: {
     ...mapActions("movies", ["fetchMovies", "handleCurrentChange", "searchMovies"]),
-    fetchData() {
-      axios.get("/movie/list", {
-            params: {
-              current: this.currentPage,
-              size: this.pageSize,
-            },
-          })
-          .then((response) => {
-            this.movies = response.data.data.records;
-            this.total = response.data.data.total;
-          })
-          .catch((error) => {
-            console.error(error);
-          });
-    },
     handleCurrentPage(currentPage) {
       this.handleCurrentChange(currentPage)
       this.fetchMovies();
-      // this.fetchData();
     },
     setDefaultImage(event) {
-      event.target.src = this.defaultImage
+      event.target.src = require('../assets/default_movie_cover.jpg')
     }
   },
-  created() {
-    // this.searchMovies()
+  mounted() {
     this.fetchMovies();
-    // this.fetchData();
-  },
+  }
 };
 </script>
 

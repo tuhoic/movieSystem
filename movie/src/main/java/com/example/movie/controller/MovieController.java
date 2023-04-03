@@ -44,8 +44,8 @@ public class MovieController {
         return ResponseData.success(moviePage);
     }
 
-    @GetMapping("/{id]")
-    public ResponseData<Movie> get(int movieId) {
+    @GetMapping("/{movieId}")
+    public ResponseData<Movie> get(@PathVariable int movieId) {
         Movie movie = movieService.getById(movieId);
         if (movie != null) {
             return ResponseData.success(movie);
