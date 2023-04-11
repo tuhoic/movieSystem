@@ -63,6 +63,7 @@ export default {
   }
 }
 </script>
+
 <style scoped>
 .top-bar {
   display: flex;
@@ -71,22 +72,40 @@ export default {
   padding: 20px;
   background-color: #f1f1f1;
   border-bottom: 1px solid #ddd;
+  height: 60px; /* 增加导航栏高度 */
 }
 
 .logo {
-  font-size: 24px;
+  font-size: 32px; /* 调整 logo 大小 */
   font-weight: bold;
+  margin-right: 20px; /* 调整 logo 与搜索框之间的距离 */
 }
 
-
-.nav a {
-  margin-left: 20px;
-  color: #333;
-  text-decoration: none;
+.search-box {
+  display: flex;
+  align-items: center;
 }
 
-.nav a:hover {
-  color: #007bff;
+.search-box input[type="text"] {
+  width: 300px; /* 调整搜索框宽度 */
+  height: 40px; /* 调整搜索框高度 */
+  border-radius: 20px; /* 调整搜索框圆角 */
+  border: none;
+  padding: 0 20px;
+  font-size: 16px;
+  background-color: #fff;
+  box-shadow: 0 0 5px #ddd;
+}
+
+.search-box button {
+  width: 80px;
+  height: 40px;
+  border-radius: 20px;
+  border: none;
+  background-color: #007bff;
+  color: #fff;
+  font-size: 16px;
+  margin-left: 10px; /* 调整搜索按钮与搜索框之间的距离 */
 }
 
 .login {
@@ -95,30 +114,27 @@ export default {
 }
 
 .avatar {
-  width: 30px;
-  height: 30px;
+  width: 40px; /* 调整头像大小 */
+  height: 40px;
   margin-right: 10px;
   border-radius: 50%;
 }
 
-.user-panel a {
-  color: #333;
-  text-decoration: none;
-  padding: 5px 10px;
-}
-
-.user-panel a:hover {
-  background-color: #f1f1f1;
-}
-
-.user-panel a:last-child {
-  border-top: 1px solid #ddd;
-}
-
-
 .el-dropdown-menu {
   width: 150px;
-  height: 200px;
+  height: auto; /* 调整下拉菜单高度 */
   color: #007bff;
+  background-color: #fff; /* 增加下拉菜单的背景色 */
+  border: none; /* 去掉下拉菜单的边框 */
+  box-shadow: 0 0 5px #ddd;
 }
+
+el-dropdown-item {
+  padding: 10px; /* 调整下拉菜单项的内边距 */
+}
+
+el-dropdown-item:hover {
+  background-color: #f1f1f1; /* 增加鼠标悬停时的背景色 */
+}
+
 </style>

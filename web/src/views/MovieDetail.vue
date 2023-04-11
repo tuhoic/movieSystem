@@ -4,12 +4,10 @@
     <img v-if="movie.fullSizeCoverUrl" :src="`/api/${movie.fullSizeCoverUrl}`" :style="{ width: '300px', height: '450px' }" @error="setDefaultImage" alt="Movie Cover" />
     <p>Director: {{ movie.director }}</p>
     <p v-if="movie.cast">Cast:
-      <span v-for="(actor, index) in movie.cast.split(',')" :key="index">
-        <span v-if="index < 3">{{ actor }}{{ index === 2 ? '' : ', ' }}</span>
-        <span v-else-if="index === 3" class="more-text" :style="showMore ? '' : 'display: none;'">{{ actor }}...</span>
-        <span v-else class="more-text" :style="showMore ? '' : 'display: none;'">{{ actor }}{{ index === movie.cast.split(',').length - 1 ? '' : ', ' }}</span>
+      <span v-for="(actor, index) in displayedCast" :key="index" v-show="showMore || index < 3">
+        {{ actor }}{{ index === displayedCast.length - 1 ? '' : ', ' }}
       </span>
-      <button class="btn-more" @click="showMore = !showMore">
+      <button class="btn-more" @click="toggleShowMore">
         {{ showMore ? 'Hide' : 'Show More' }}
       </button>
     </p>
@@ -34,6 +32,14 @@ export default {
     setDefaultImage(event) {
       event.target.src = require('../assets/default_movie_cover.jpg')
     },
+    toggleShowMore() {
+      this.showMore = !this.showMore
+    },
+  },
+  computed: {
+    displayedCast() {
+      return this.movie.cast ? this.movie.cast.split(',') : []
+    },
   },
   mounted() {
     const movieId = this.$route.params.id
@@ -45,9 +51,6 @@ export default {
 </script>
 
 <style>
-.more-text {
-  display: none;
-}
 .btn-more {
   margin-left: 10px;
   font-size: 14px;
