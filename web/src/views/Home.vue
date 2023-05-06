@@ -21,6 +21,7 @@
 </template>
 
 <script>
+
 import { ElPagination} from "element-plus";
 import TopBar from "@/components/Header.vue";
 import {mapActions, mapGetters} from "vuex";
@@ -32,13 +33,19 @@ export default {
     ElPagination: ElPagination,
   },
   computed: {
-    ...mapGetters("movies", ["movies", "currentPage", "pageSize", "total"])
+    ...mapGetters('auth', ["user"]),
+    ...mapGetters("movies", ["movies", "currentPage", "pageSize", "total", "currentMovie"])
   },
   methods: {
-    ...mapActions("movies", ["fetchMovies", "handleCurrentChange", "searchMovies"]),
+    ...mapActions("movies", ["fetchMovies", "handleCurrentChange", "recommendations"]),
     handleCurrentPage(currentPage) {
       this.handleCurrentChange(currentPage)
-      this.fetchMovies();
+      if (this.currentMovie) {
+        this.fetchMovies()
+      } else {
+        this.recommendations(this.user.id)
+      }
+      window.scrollTo(0, 0)
     },
     setDefaultImage(event) {
       event.target.src = require('../assets/default_movie_cover.jpg')

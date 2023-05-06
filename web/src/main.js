@@ -5,6 +5,7 @@ import 'element-plus/dist/index.css'
 import router from "@/router";
 import store from "@/store";
 import axios from "axios";
+import '@fortawesome/fontawesome-free/css/all.css'
 
 axios.defaults.baseURL = 'http://localhost:8000'
 

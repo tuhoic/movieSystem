@@ -9,17 +9,17 @@ import java.io.Serializable;
 
 /**
  * <p>
- * 
+ *
  * </p>
  */
 @Data
-  @EqualsAndHashCode(callSuper = false)
-    public class Movie implements Serializable {
+@EqualsAndHashCode(callSuper = false)
+public class Movie implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-      @TableId(value = "id", type = IdType.AUTO)
-      private Integer id;
+    @TableId(value = "id", type = IdType.AUTO)
+    private Integer id;
 
     private String title;
 

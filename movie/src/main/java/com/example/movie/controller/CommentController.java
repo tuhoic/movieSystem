@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RestController;
  * </p>
  */
 @RestController
-@RequestMapping("//comment")
+@RequestMapping("/comment")
 public class CommentController {
 
 }

@@ -53,7 +53,7 @@ const actions = {
         try {
             const response = await axios.post('/user/register', registerForm);
             if (response.data.code === 200) {
-                alert("注册成功!我们将在5s内跳到登陆页面!");
+                this.$message.success("注册成功!我们将在5s内跳到登陆页面!");
                 commit('LOGOUT_USER')
                 await router.push("/login");
             } else {

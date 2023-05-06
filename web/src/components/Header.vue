@@ -1,10 +1,13 @@
 <template>
   <div class="top-bar">
     <div class="logo">
-      <router-link to="/">电影系统</router-link>
+      <router-link to="/" @click="handleClick">首页</router-link>
+    </div>
+    <div v-if="isAuthenticated" class="logo">
+      <router-link to="/" @click="recommend">电影推荐</router-link>
     </div>
     <div class="search-box">
-      <input type="text" placeholder="Search movie title" v-model="title" @keyup.enter="search">
+      <input type="text" :placeholder=placeholder v-model="title" @keyup.enter="search">
       <button @click="search">搜索</button>
     </div>
     <div class="login">
@@ -25,6 +28,7 @@
     </div>
   </div>
 </template>
+
 <script>
 import { mapActions, mapGetters } from 'vuex'
 import router from "@/router";
@@ -40,10 +44,14 @@ export default {
   },
   computed: {
     ...mapGetters('auth', ['isAuthenticated', 'user']),
+    ...mapGetters('movies', ['searchTitle', 'currentPage', 'currentMovie']),
+    placeholder() {
+      return this.title ? this.title : "Search movie title";
+    }
   },
   methods: {
-    ...mapActions('auth', ['logout', 'init']),
-    ...mapActions('movies', ["fetchMovies", 'searchMovies']),
+    ...mapActions('auth', ['logout',]),
+    ...mapActions('movies', ["fetchMovies", 'searchMovies', 'recommendations', 'handleCurrentChange']),
     search() {
       this.searchMovies(this.title);
       this.fetchMovies();
@@ -55,25 +63,39 @@ export default {
       this.logout()
     },
     setDefaultImage(event) {
-      event.target.src = this.defaultImage
+      event.target.src = require("@/assets/headPortrait.jpg")
+    },
+    handleClick() {
+      this.title = ''
+      this.search()
+    },
+    recommend() {
+      this.handleCurrentChange(1)
+      this.recommendations(this.user.id)
     }
   },
   mounted() {
-
+    this.title = this.searchTitle
   }
 }
 </script>
 
 <style scoped>
 .top-bar {
+  position: fixed; /* 固定在页面顶部 */
+  top: 0; /* 距离页面顶部0像素 */
+  left: 0; /* 距离页面左侧0像素 */
+  right: 0; /* 距离页面右侧0像素 */
+  z-index: 9999; /* 使其显示在最上层 */
   display: flex;
   align-items: center;
   justify-content: space-between;
   padding: 20px;
   background-color: #f1f1f1;
   border-bottom: 1px solid #ddd;
-  height: 60px; /* 增加导航栏高度 */
+  height: 30px; /* 增加导航栏高度 */
 }
+
 
 .logo {
   font-size: 32px; /* 调整 logo 大小 */
