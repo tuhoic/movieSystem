@@ -12,7 +12,7 @@ import org.springframework.stereotype.Service;
  * </p>
  *
  * @author Your Name
- * @since 2023-03-19
+ * @since 2023-05-11
  */
 @Service
 public class RatingServiceImpl extends ServiceImpl<RatingMapper, Rating> implements RatingService {

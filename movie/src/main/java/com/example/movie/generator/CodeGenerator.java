@@ -44,7 +44,7 @@ public class CodeGenerator {
         strategyConfig.setEntityLombokModel(true);
         strategyConfig.setRestControllerStyle(true);
         strategyConfig.setControllerMappingHyphenStyle(true);
-        strategyConfig.setInclude("user", "movie", "comment", "rating"); // 需要生成代码的表名
+        strategyConfig.setInclude(); // 需要生成代码的表名
 
         // 代码生成器
         AutoGenerator autoGenerator = new AutoGenerator();

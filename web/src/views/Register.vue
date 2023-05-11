@@ -12,6 +12,9 @@
       <el-form-item label="密码" prop="password">
         <el-input type="password" v-model="registerForm.password" placeholder="请输入密码"></el-input>
       </el-form-item>
+      <el-form-item label="确认密码" prop="password">
+        <el-input type="password" v-model="registerForm.confirmPassword" placeholder="请确认密码"></el-input>
+      </el-form-item>
       <el-form-item>
         <slide-verify
             ref="slider"
@@ -145,9 +148,9 @@ export default {
   components: {TopBar, SlideVerify},
   data() {
     const validateUsername = (rule, value, callback) => {
-      const reg = /^.{2,}$/; // 至少2个字符
+      const reg = /^.{6,}$/; // 至少2个字符
       if (!reg.test(value)) {
-        callback(new Error('用户名至少为2个字符'));
+        callback(new Error('用户名至少为6个字符'));
       } else {
         callback();
       }
@@ -168,16 +171,25 @@ export default {
         callback();
       }
     };
+    const validConfirmPassword = (rule, value, callback) => {
+      if (value !== this.registerForm.password) {
+        callback(new Error('两次密码输入不一致'));
+      } else {
+        callback();
+      }
+    };
     return {
       registerForm: {
-        username: '',
-        email: '',
-        password: ''
+        username: 'username',
+        email: 'username@qq.com',
+        password: 'password',
+        confirmPassword: 'password'
       },
       registerRules: {
         username: [{ required: true, validator: validateUsername, trigger: 'blur' }],
         email: [{ required: true, validator: validateEmail, trigger: 'blur'}],
         password: [{ required: true, validator: validatePassword, trigger: 'blur' }],
+        confirmPassword: [{ required: true, validator: validConfirmPassword, trigger: 'blur' }],
       },
       showTopBar: false,
       isVerified: false,

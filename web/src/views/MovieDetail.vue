@@ -33,12 +33,32 @@
             <span v-for="n in maxStars" :key="n" class="star" @click="setRating(n)" :class="{ 'rated': n <= currentRating }">
               <i class="fa fa-star"></i>
             </span>
-            <div class="text">{{ this.currentRating }}</div>
           </div>
         </div>
       </div>
     </div>
   </div>
+  <!-- 评论模块开始 -->
+  <div class="comments">
+    <h2>用户评论</h2>
+    <div v-if="!isAuthenticated" class="login-tip">
+      请<a @click="toLogin">登录</a>后发表评论
+    </div>
+    <div class="new-comment" v-if="isAuthenticated">
+      <textarea v-model="commentContent" placeholder="发表评论"></textarea>
+      <button class="btn-comment" @click="addComment">提交评论</button>
+    </div>
+    <div class="comment-list">
+      <div v-for="(comment, index) in comments" :key="index" class="comment">
+        <div class="comment-header">
+          <span>{{ comment.userName }}</span>
+          <span>{{ formatDate(comment.createTime) }}</span>
+        </div>
+        <div class="comment-content">{{ comment.content }}</div>
+      </div>
+    </div>
+  </div>
+  <!-- 评论模块结束 -->
 </template>
 
 <script>
@@ -106,7 +126,7 @@ export default {
           movieId: this.movie.id,
           rating: this.currentRating
         }).then((res) => {
-          console.log(res)
+          this.$message.success(res.data.message)
         })
       } else if (this.currentRating !== rating) {
         this.currentRating = rating
@@ -116,7 +136,7 @@ export default {
           movieId: this.movie.id,
           rating: this.currentRating
         }).then((res) => {
-          console.log(res.data)
+          this.$message.success(res.data.message)
         })
       }
     }
@@ -146,10 +166,17 @@ export default {
     const movieId = this.$route.params.id
     axios.get(`/movie/${movieId}`).then((response) => {
       this.movie = response.data.data
-    });
-    axios.get(`/rating/get?userId=${this.user.id}&movieId=${movieId}`).then((response) => {
-      this.currentRating = response.data.data.rating ? response.data.data.rating : 0
-    });
+    })
+    if (this.user != null) {
+      axios.get(`/rating/get?userId=${this.user.id}&movieId=${movieId}`).then((response) => {
+        console.log(response)
+        if (response.status === 200) {
+          if (response.data.code === 200) {
+            this.currentRating = response.data.data.rating ? response.data.data.rating : 0
+          }
+        }
+      });
+    }
   },
 }
 </script>

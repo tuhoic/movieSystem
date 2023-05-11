@@ -11,7 +11,7 @@
       </el-form-item>
       <el-form-item>
         <slide-verify
-          ref="slider"
+          ref="verify"
           :slider-text="'Slide to verify'"
           :imgs="
           [
@@ -142,9 +142,9 @@ export default {
   components: {TopBar, SlideVerify},
   data() {
     const validateUsername = (rule, value, callback) => {
-      const reg = /^.{2,}$/; // 至少2个字符
+      const reg = /^.{6,}$/; // 至少2个字符
       if (!reg.test(value)) {
-        callback(new Error('用户名至少为2个字符'));
+        callback(new Error('用户名至少为6个字符'));
       } else {
         callback();
       }
@@ -159,7 +159,7 @@ export default {
     };
     return {
       loginForm: {
-        username: 'user',
+        username: 'username',
         password: 'password',
       },
       loginRules: {
@@ -189,6 +189,7 @@ export default {
           return false;
         }
       });
+      this.$refs.verify.refresh();
     },
     toRegister() {
       router.push("/register")
@@ -209,6 +210,7 @@ export default {
     window.removeEventListener('mousemove', this.handleMouseMove);
   }
 };
+
 </script>
 
 <style scoped>

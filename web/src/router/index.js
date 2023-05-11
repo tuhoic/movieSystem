@@ -24,17 +24,13 @@ const routes = [
     {
         path: "/profile",
         name: 'Profile',
-        component: () => import('../views/Profile.vue')
+        component: () => import('../views/Profile.vue'),
+        meta: { requiresAuth: true } // 添加需要登陆拦截的标记
     },
     {
         path: "/modification",
         name: "Modification",
-        component: () => import('../views/Modification.vue')
-    },
-    {
-        path: '/recommendations',
-        name: 'Recommendations',
-        component: () => import('../views/Recommendations.vue'),
+        component: () => import('../views/Modification.vue'),
     },
     {
         path: '/test',
@@ -46,6 +42,22 @@ const routes = [
 const router = createRouter({
     history: createWebHistory(process.env.BASE_URL),
     routes
+})
+
+// 在路由器中添加拦截器
+router.beforeEach((to, from, next) => {
+    // 判断是否需要进行登陆拦截
+    if (to.meta.requiresAuth) {
+        // 判断用户是否已登录
+        const isLoggedIn = Boolean(localStorage.getItem('token')) // 假设登陆时将 token 存储在 localStorage 中
+        if (isLoggedIn) {
+            next()
+        } else {
+            next('/login') // 如果用户未登录，重定向到登录页面
+        }
+    } else {
+        next()
+    }
 })
 
 export default router

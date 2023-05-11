@@ -7,11 +7,19 @@
       <router-link to="/" @click="recommend">电影推荐</router-link>
     </div>
     <div class="search-box">
+      <el-select v-model="currentGenre" placeholder="所有类型" class="select">
+        <el-option value="All"></el-option>
+        <el-option v-for="genre in genres" :key="genre" :label="genre" :value="genre"></el-option>
+      </el-select>
       <input type="text" :placeholder=placeholder v-model="title" @keyup.enter="search">
       <button @click="search">搜索</button>
     </div>
     <div class="login">
-      <router-link v-if="!isAuthenticated" to="/login">登录</router-link>
+      <div v-if="!isAuthenticated" class="auth-links">
+        <router-link  to="/login">登录</router-link>
+        <br>
+        <router-link  to="/register">注册</router-link>
+      </div>
       <div v-else>
         <el-dropdown>
           <span class="el-dropdown-link" @mouseover="showMenu = true" @mouseleave="showMenu = false">
@@ -39,21 +47,24 @@ export default {
     return {
       title: "",
       showMenu: false,
+      currentGenre: "All",
+      genres: ['Action', 'Adult', 'Adventure', 'Animation', 'Biography', 'Comedy', 'Crime', 'Documentary', 'Drama', 'Family', 'Fantasy', 'Film-Noir', 'Game-Show', 'History', 'Horror', 'Music', 'Musical', 'Mystery', 'News', 'Reality-TV', 'Romance', 'Sci-Fi', 'Short', 'Sport', 'Talk-Show', 'Thriller', 'War', 'Western'],
       defaultImage: "api/headPortrait.jpg"
     }
   },
   computed: {
     ...mapGetters('auth', ['isAuthenticated', 'user']),
-    ...mapGetters('movies', ['searchTitle', 'currentPage', 'currentMovie']),
+    ...mapGetters('movies', ['searchTitle', 'currentPage', 'currentMovie', "genre"]),
     placeholder() {
       return this.title ? this.title : "Search movie title";
     }
   },
   methods: {
-    ...mapActions('auth', ['logout',]),
-    ...mapActions('movies', ["fetchMovies", 'searchMovies', 'recommendations', 'handleCurrentChange']),
+    ...mapActions('auth', ['logout']),
+    ...mapActions('movies', ["fetchMovies", 'searchMovies', 'recommendations', 'handleCurrentChange', 'handleGenreChange']),
     search() {
       this.searchMovies(this.title);
+      this.handleGenreChange(this.currentGenre);
       this.fetchMovies();
     },
     toProfile() {
@@ -67,6 +78,7 @@ export default {
     },
     handleClick() {
       this.title = ''
+      this.currentPage = 'All'
       this.search()
     },
     recommend() {
@@ -76,11 +88,20 @@ export default {
   },
   mounted() {
     this.title = this.searchTitle
+    this.currentGenre = this.genre
   }
 }
 </script>
 
 <style scoped>
+.select {
+  width: 150px;
+}
+.auth-links {
+  display: flex;
+  gap: 10px; /* 设置元素之间的间距 */
+}
+
 .top-bar {
   position: fixed; /* 固定在页面顶部 */
   top: 0; /* 距离页面顶部0像素 */
@@ -95,7 +116,6 @@ export default {
   border-bottom: 1px solid #ddd;
   height: 30px; /* 增加导航栏高度 */
 }
-
 
 .logo {
   font-size: 32px; /* 调整 logo 大小 */

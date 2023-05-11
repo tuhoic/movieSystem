@@ -32,11 +32,15 @@ public class MovieController {
     @GetMapping("/search")
     public ResponseData<Page<Movie>> search(@RequestParam(defaultValue = "") String title,
                                             @RequestParam(defaultValue = "1") int current,
-                                            @RequestParam(defaultValue = "20") int pageSize) {
+                                            @RequestParam(defaultValue = "20") int pageSize,
+                                            @RequestParam(defaultValue = "All") String genre) {
         Page<Movie> page = new Page<>(current, pageSize);
 
         QueryWrapper<Movie> queryWrapper = new QueryWrapper<>();
         queryWrapper.like("title", title);
+        if (!genre.equals("All")) {
+            queryWrapper.like("genre", genre);
+        }
         Page<Movie> moviePage = movieService.page(page, queryWrapper);
         return ResponseData.success(moviePage);
     }
@@ -55,20 +59,7 @@ public class MovieController {
     public ResponseData<Page<Movie>> getRecommendations(@RequestParam int userId,
                                                         @RequestParam(defaultValue = "1") int current,
                                                         @RequestParam(defaultValue = "20") int pageSize) {
-        List<Movie> movies = new ArrayList<>();
-        Page<Integer> movieIds = userBasedCollaborativeFiltering.recommendItems(userId, current, pageSize);
-
-        for (Integer movieId : movieIds.getRecords()) {
-            Movie movie = movieService.getById(movieId);
-            if (movie != null) {
-                movies.add(movie);
-            }
-        }
-
-        Page<Movie> moviePage = new Page<>(current, pageSize);
-        moviePage.setRecords(movies);
-        moviePage.setTotal(movieIds.getTotal());
-        return ResponseData.success(moviePage);
+        return ResponseData.success(userBasedCollaborativeFiltering.recommendItems(userId, current, pageSize));
     }
 
 }

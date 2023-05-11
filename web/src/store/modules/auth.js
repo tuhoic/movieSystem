@@ -1,5 +1,6 @@
 import router from "@/router";
 import axios from "axios";
+import { ElMessage } from 'element-plus'
 
 const state = {
     isAuthenticated: false,
@@ -26,13 +27,13 @@ const actions = {
                     localStorage.setItem('user', JSON.stringify(user));
                     await router.push("/");
                 } else {
-                    alert(userResponse.data.message);
+                    ElMessage.error(userResponse.data.message)
                 }
             } else {
-                alert(response.data.message);
+                ElMessage.error(response.data.message)
             }
         } catch (error) {
-            console.log(error);
+            ElMessage.error(error)
         }
     },
 
@@ -44,8 +45,9 @@ const actions = {
             localStorage.removeItem('user');
             delete axios.defaults.headers.common['Authorization']; // 删除 axios 的默认请求头中的 token
             await router.push("/");
+            ElMessage.success("退出系统成功！")
         } catch (error) {
-            console.log(error);
+            ElMessage.error(error)
         }
     },
 
@@ -53,14 +55,16 @@ const actions = {
         try {
             const response = await axios.post('/user/register', registerForm);
             if (response.data.code === 200) {
-                this.$message.success("注册成功!我们将在5s内跳到登陆页面!");
+                ElMessage.success("注册成功!我们将在2s后跳到登录页面!");
                 commit('LOGOUT_USER')
-                await router.push("/login");
+                setTimeout(()=> {
+                    router.push("/login");
+                }, 2000)
             } else {
-                alert(response.data.message);
+                ElMessage.error(response.data.message)
             }
         }catch (error) {
-            console.log(error);
+            ElMessage.error(error);
         }
     },
 
@@ -73,14 +77,14 @@ const actions = {
             };
             const response = await axios.post('/user/modification', data);
             if (response.data.code === 200) {
-                alert("修改密码成功!我们将在5s内跳到登陆页面!");
+                ElMessage.error("修改密码成功!我们将在5s内跳到登陆页面!")
                 commit('LOGOUT_USER')
                 await router.push("/login");
             } else {
-                alert(response.data.message);
+                ElMessage.error(response.data.message)
             }
         }catch (error) {
-            console.log(error);
+            ElMessage.error(error)
         }
     }
 };

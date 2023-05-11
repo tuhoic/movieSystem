@@ -149,9 +149,9 @@ export default {
   components: {TopBar, SlideVerify},
   data() {
     const validateUsername = (rule, value, callback) => {
-      const reg = /^.{2,}$/; // 至少2个字符
+      const reg = /^.{6,}$/; // 至少2个字符
       if (!reg.test(value)) {
-        callback(new Error('用户名至少为2个字符'));
+        callback(new Error('用户名至少为6个字符'));
       } else {
         callback();
       }
@@ -181,8 +181,8 @@ export default {
     };
     return {
       modificationForm: {
-        username: 'user1',
-        email: "user1@example.com",
+        username: 'username',
+        email: "username@qq.com",
         password: 'password1',
         confirmPassword: "password1",
       },
