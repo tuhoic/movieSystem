@@ -103,11 +103,6 @@ export default {
 }
 
 .top-bar {
-  position: fixed; /* 固定在页面顶部 */
-  top: 0; /* 距离页面顶部0像素 */
-  left: 0; /* 距离页面左侧0像素 */
-  right: 0; /* 距离页面右侧0像素 */
-  z-index: 9999; /* 使其显示在最上层 */
   display: flex;
   align-items: center;
   justify-content: space-between;

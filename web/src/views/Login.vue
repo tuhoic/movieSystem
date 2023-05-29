@@ -1,5 +1,5 @@
 <template>
-  <top-bar v-if="showTopBar"></top-bar>
+  <top-bar class="new" v-if="showTopBar"></top-bar>
   <div class="login-container">
     <h1 style="color: #007bff">用户登录</h1>
     <el-form :model="loginForm" :rules="loginRules" ref="loginForm" label-width="80px" class="login-form">
@@ -214,6 +214,22 @@ export default {
 </script>
 
 <style scoped>
+
+.new {
+  position: fixed; /* 固定在页面顶部 */
+  top: 0; /* 距离页面顶部0像素 */
+  left: 0; /* 距离页面左侧0像素 */
+  right: 0; /* 距离页面右侧0像素 */
+  z-index: 9999; /* 使其显示在最上层 */
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 20px;
+  background-color: #f1f1f1;
+  border-bottom: 1px solid #ddd;
+  height: 30px; /* 增加导航栏高度 */
+}
+
 .login-container {
   display: flex;
   flex-direction: column;

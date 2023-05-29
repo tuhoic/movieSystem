@@ -2,37 +2,38 @@
   <top-bar></top-bar>
   <div class="movie-details">
     <div class="movie-poster">
-      <img v-if="movie.fullSizeCoverUrl" :src="`/api/${movie.fullSizeCoverUrl}`" :style="{ width: '100%', height: '100%' }" @error="setDefaultImage" alt="Movie Cover" />
+      <img v-if="movie.fullSizeCoverUrl" :src="`/api/${movie.fullSizeCoverUrl}`" :style="{ width: '100%', height: '100%' }" @error="setDefaultMovieImage" alt="Movie Cover" />
     </div>
     <div class="movie-info">
       <h1>{{ movie.title }}</h1>
-      <p>导演: {{ movie.director }}</p>
-      <p v-if="movie.cast">主演:
+      <p>导演：{{ movie.director }}</p>
+      <p v-if="movie.cast">主演：
         <span v-for="(actor, index) in displayedCast" :key="index" v-show="showMore || index < 3">
-          {{ actor }}{{ index === displayedCast.length - 1 ? '' : ', ' }}
+          {{ actor }}{{ index === displayedCast.length - 1 ? '' : '，' }}
         </span>
         <button class="btn-more" @click="toggleShowMore">
           {{ showMore ? '隐藏' : '显示更多' }}
         </button>
       </p>
-      <p>类型: {{ movie.genre }}</p>
-      <p>时长: {{ movie.duration }} 分钟</p>
-      <p>上映日期: {{ movie.releaseDate }}</p>
-      <p>评分: {{ movie.rating }}/10</p>
+      <p>类型：{{ movie.genre }}</p>
+      <p>时长：{{ movie.duration }}分钟</p>
+      <p>上映日期：{{ movie.releaseDate }}</p>
+      <p>评分：{{ movie.rating }}/10</p>
       <div v-if="isAuthenticated" class="movie-action">
         <div>
-          <button class="btn-like" @click="toggleLike">
+          <el-button class="btn-like" @click="toggleLike">
             {{ isLiked ? '取消赞' : '赞' }} {{ likes }}
-          </button>
-          <button class="btn-collect" @click="toggleCollect">
+          </el-button>
+          <el-button class="btn-collect" @click="toggleCollect">
             {{ isCollected ? '取消收藏' : '收藏' }} {{ collects }}
-          </button>
+          </el-button>
         </div>
         <div class="rating-wrapper">
           <div class="star-rating">
             <span v-for="n in maxStars" :key="n" class="star" @click="setRating(n)" :class="{ 'rated': n <= currentRating }">
               <i class="fa fa-star"></i>
             </span>
+            <div class="text">{{ this.currentRating }}</div>
           </div>
         </div>
       </div>
@@ -41,21 +42,21 @@
   <!-- 评论模块开始 -->
   <div class="comments">
     <h2>用户评论</h2>
-    <div v-if="!isAuthenticated" class="login-tip">
-      请<a @click="toLogin">登录</a>后发表评论
-    </div>
-    <div class="new-comment" v-if="isAuthenticated">
-      <textarea v-model="commentContent" placeholder="发表评论"></textarea>
-      <button class="btn-comment" @click="addComment">提交评论</button>
-    </div>
     <div class="comment-list">
       <div v-for="(comment, index) in comments" :key="index" class="comment">
         <div class="comment-header">
-          <span>{{ comment.userName }}</span>
-          <span>{{ formatDate(comment.createTime) }}</span>
+          <img class="avatar" :src="`/api/` + comment.headPortrait" @error="setDefaultHeadPortraitImage" alt="用户头像">
+          <span>{{ comment.username }}</span>
+          <span>{{ comment.createTime }}</span>
         </div>
         <div class="comment-content">{{ comment.content }}</div>
       </div>
+    </div>
+    <div class="new-comment">
+      <textarea v-model="commentContent" placeholder="发表评论"></textarea>
+      <button class="btn-comment" @click="isAuthenticated ? addComment() : redirectToLogin()">
+        {{ isAuthenticated ? '提交评论' : '请登录' }}
+      </button>
     </div>
   </div>
   <!-- 评论模块结束 -->
@@ -66,8 +67,10 @@
 import axios from 'axios'
 import TopBar from "@/components/Header.vue";
 import {mapGetters} from "vuex";
+import router from "@/router";
 
 export default {
+  name: "TestPage",
   components: { TopBar },
   props: {
     maxStars: {
@@ -88,12 +91,17 @@ export default {
       likes: 0,
       collects: 0,
       userRating: null,
-      currentRating: this.initialRating
+      currentRating: this.initialRating,
+      commentContent: "",
+      comments: [],
     }
   },
   methods: {
-    setDefaultImage(event) {
+    setDefaultMovieImage(event) {
       event.target.src = require('../assets/default_movie_cover.jpg')
+    },
+    setDefaultHeadPortraitImage(event) {
+      event.target.src = require('../assets/headPortrait.jpg')
     },
     toggleShowMore() {
       this.showMore = !this.showMore
@@ -139,6 +147,70 @@ export default {
           this.$message.success(res.data.message)
         })
       }
+    },
+    toLogin()  {
+      router.push("/")
+    },
+    getComments() {
+      axios.get(`/comment/list?movieId=${this.$route.params.id}`).then((res) => {
+        if (res.status === 200) {
+          this.comments = res.data.data.records
+        }
+      })
+    },
+    addComment() {
+      axios.post('/comment/add', {
+        userId: this.user.id,
+        movieId: this.movie.id,
+        content: this.commentContent
+      }).then((res) => {
+        this.$message.success(res.data.message)
+        if (res.status === 200) {
+          this.commentContent = ""
+          this.getComments()
+        }
+      })
+    },
+    toggleLike() {
+      if (!this.isLiked) {
+        axios.post(`/likes/add`, {
+          userId: this.user.id,
+          movieId: this.$route.params.id,
+        }).then((response) => {
+          this.$message.success(response.data.message)
+          this.likeMovie()
+        })
+      } else {
+        axios.post(`/likes/delete`, {
+          userId: this.user.id,
+          movieId: this.$route.params.id,
+        }).then((response) => {
+          this.$message.success(response.data.message)
+          this.likeMovie()
+        })
+      }
+    },
+    toggleCollect() {
+      if (!this.isCollected) {
+        axios.post(`/favorites/add`, {
+          userId: this.user.id,
+          movieId: this.$route.params.id,
+        }).then((response) => {
+          this.$message.success(response.data.message)
+          this.collectMovie()
+        })
+      } else {
+        axios.post(`/favorites/delete`,{
+          userId: this.user.id,
+          movieId: this.movie.id,
+        }).then((response) => {
+          this.$message.success(response.data.message)
+          this.collectMovie()
+        })
+      }
+    },
+    redirectToLogin() {
+      router.push("/login")
     }
   },
   computed: {
@@ -164,24 +236,42 @@ export default {
   },
   mounted() {
     const movieId = this.$route.params.id
+    this.getComments();
     axios.get(`/movie/${movieId}`).then((response) => {
       this.movie = response.data.data
     })
     if (this.user != null) {
       axios.get(`/rating/get?userId=${this.user.id}&movieId=${movieId}`).then((response) => {
-        console.log(response)
         if (response.status === 200) {
           if (response.data.code === 200) {
             this.currentRating = response.data.data.rating ? response.data.data.rating : 0
           }
         }
       });
+      axios.get(`/likes/get?userId=${this.user.id}&movieId=${movieId}`).then((response) => {
+        if (response.status === 200) {
+          this.isLiked = response.data.data
+        }
+      })
+      axios.get(`/favorites/get?userId=${this.user.id}&movieId=${movieId}`).then((response) => {
+        if (response.status === 200) {
+          this.isCollected = response.data.data
+        }
+      })
     }
+    axios.get(`likes/list?movieId=${movieId}`).then((response) => {
+      this.likes = response.data.data
+    })
+    axios.get(`favorites/list?movieId=${movieId}`).then((response) => {
+      this.collects = response.data.data
+    })
+
   },
 }
+
 </script>
 
-<style>
+<style scoped>
 .movie-details {
   display: flex;
   flex-direction: row;
@@ -192,7 +282,6 @@ export default {
 .movie-poster {
   flex-basis: 40%;
   margin-right: 40px;
-
 }
 
 .movie-info {
@@ -208,13 +297,6 @@ export default {
   justify-content: flex-end;
   align-items: flex-end;
   margin-top: 40px;
-}
-
-.container {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  margin-top: 50px;
 }
 
 .container img {
@@ -262,4 +344,80 @@ export default {
   color: gold;
 }
 
+.comments {
+  margin-top: 50px;
+}
+
+.comments h2 {
+  margin-bottom: 20px;
+  font-size: 28px;
+}
+
+.login-tip {
+  margin-top: 20px;
+  font-size: 24px;
+}
+
+.new-comment {
+  margin-top: 20px;
+}
+
+.new-comment textarea {
+  width: 100%;
+  height: 100px;
+  font-size: 20px;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  resize: none;
+}
+
+.btn-comment {
+  margin-top: 10px;
+  font-size: 20px;
+  padding: 10px 20px;
+  border-radius: 5px;
+  background-color: #4CAF50;
+  color: white;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.btn-comment:hover {
+  background-color: #3e8e41;
+}
+
+.comment {
+  margin-top: 20px;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+
+.comment-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 5px;
+  font-size: 18px;
+}
+
+.comment-header img.avatar {
+  margin-right: 10px;
+}
+
+.comment-header span:last-child {
+  margin-left: auto;
+}
+
+.comment-content {
+  font-size: 20px;
+}
+
+.avatar {
+  width: 40px; /* 调整头像大小 */
+  height: 40px;
+  margin-right: 10px;
+  border-radius: 50%;
+}
 </style>

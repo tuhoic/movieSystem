@@ -19,7 +19,7 @@ const actions = {
             if (response.data.code === 200) {
                 const token = response.data.data;
                 localStorage.setItem('token', token); // 将token存储在本地
-                axios.defaults.headers.common['Authorization'] = `Bearer ${token}`; // 设置axios默认请求头
+                axios.defaults.headers.common['Authorization'] = token; // 设置axios默认请求头
                 const userResponse = await axios.get('/user/info'); // 根据token获取用户信息
                 if (userResponse.data.code === 200) {
                     const user = userResponse.data.data;
@@ -104,7 +104,7 @@ const mutations = {
         if (token && user) {
             state.isAuthenticated = true;
             state.user = JSON.parse(user);
-            axios.defaults.headers.common['Authorization'] = `Bearer ${token}`; // 设置axios默认请求头
+            axios.defaults.headers.common['Authorization'] = token; // 设置axios默认请求头
         }
     }
 };

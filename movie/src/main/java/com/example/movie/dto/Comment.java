@@ -1,17 +1,9 @@
 package com.example.movie.dto;
 
-import com.baomidou.mybatisplus.annotation.IdType;
-import com.baomidou.mybatisplus.annotation.TableId;
+import lombok.Data;
 
 import java.io.Serializable;
 
-import lombok.Data;
-
-/**
- * <p>
- *
- * </p>
- */
 @Data
 public class Comment implements Serializable {
 
@@ -19,14 +11,16 @@ public class Comment implements Serializable {
 
     private String username;
 
+    private String movieName;
+
     private String headPortrait;
+
+    private Integer userId;
 
     private Integer movieId;
 
     private String content;
 
     private String createTime;
-
-
 
 }

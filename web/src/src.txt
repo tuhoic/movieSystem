@@ -1,0 +1,140 @@
+文件夹 PATH 列表
+卷序列号为 B4AF-58BF
+D:.
+│  App.vue
+│  main.js
+│  src.txt
+│  
+├─assets
+│      default_1.jpeg
+│      default_10.jpeg
+│      default_100.jpeg
+│      default_11.jpeg
+│      default_12.jpeg
+│      default_13.jpeg
+│      default_14.jpeg
+│      default_15.jpeg
+│      default_16.jpeg
+│      default_17.jpeg
+│      default_18.jpeg
+│      default_19.jpeg
+│      default_2.jpeg
+│      default_20.jpeg
+│      default_21.jpeg
+│      default_22.jpeg
+│      default_23.jpeg
+│      default_24.jpeg
+│      default_25.jpeg
+│      default_26.jpeg
+│      default_27.jpeg
+│      default_28.jpeg
+│      default_29.jpeg
+│      default_3.jpeg
+│      default_30.jpeg
+│      default_31.jpeg
+│      default_32.jpeg
+│      default_33.jpeg
+│      default_34.jpeg
+│      default_35.jpeg
+│      default_36.jpeg
+│      default_37.jpeg
+│      default_38.jpeg
+│      default_39.jpeg
+│      default_4.jpeg
+│      default_40.jpeg
+│      default_41.jpeg
+│      default_42.jpeg
+│      default_43.jpeg
+│      default_44.jpeg
+│      default_45.jpeg
+│      default_46.jpeg
+│      default_47.jpeg
+│      default_48.jpeg
+│      default_49.jpeg
+│      default_5.jpeg
+│      default_50.jpeg
+│      default_51.jpeg
+│      default_52.jpeg
+│      default_53.jpeg
+│      default_54.jpeg
+│      default_55.jpeg
+│      default_56.jpeg
+│      default_57.jpeg
+│      default_58.jpeg
+│      default_59.jpeg
+│      default_6.jpeg
+│      default_60.jpeg
+│      default_61.jpeg
+│      default_62.jpeg
+│      default_63.jpeg
+│      default_64.jpeg
+│      default_65.jpeg
+│      default_66.jpeg
+│      default_67.jpeg
+│      default_68.jpeg
+│      default_69.jpeg
+│      default_7.jpeg
+│      default_70.jpeg
+│      default_71.jpeg
+│      default_72.jpeg
+│      default_73.jpeg
+│      default_74.jpeg
+│      default_75.jpeg
+│      default_76.jpeg
+│      default_77.jpeg
+│      default_78.jpeg
+│      default_79.jpeg
+│      default_8.jpeg
+│      default_80.jpeg
+│      default_81.jpeg
+│      default_82.jpeg
+│      default_83.jpeg
+│      default_84.jpeg
+│      default_85.jpeg
+│      default_86.jpeg
+│      default_87.jpeg
+│      default_88.jpeg
+│      default_89.jpeg
+│      default_9.jpeg
+│      default_90.jpeg
+│      default_91.jpeg
+│      default_92.jpeg
+│      default_93.jpeg
+│      default_94.jpeg
+│      default_95.jpeg
+│      default_96.jpeg
+│      default_97.jpeg
+│      default_98.jpeg
+│      default_99.jpeg
+│      default_movie_cover.jpg
+│      headPortrait.jpg
+│      login_background.png
+│      modifacation_background.png
+│      register_background.png
+│      
+├─components
+│      Header.vue
+│      
+├─router
+│      index.js
+│      
+├─store
+│  │  index.js
+│  │  
+│  └─modules
+│          auth.js
+│          movies.js
+│          
+├─utils
+│      axios.js
+│      
+└─views
+        Home.vue
+        Login.vue
+        Modification.vue
+        MovieDetail.vue
+        Profile.vue
+        Register.vue
+        Test.vue
+        Test1.vue
+        

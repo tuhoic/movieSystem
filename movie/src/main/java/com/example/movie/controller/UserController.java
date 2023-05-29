@@ -4,16 +4,24 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.example.movie.common.ResponseData;
 import com.example.movie.common.ResultCode;
 import com.example.movie.entity.User;
+import com.example.movie.entity.Usertokens;
 import com.example.movie.service.UserService;
+import com.example.movie.service.UsertokensService;
 import com.example.movie.utils.JwtTokenUtil;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
+import java.io.File;
+import java.io.IOException;
+import java.time.LocalDateTime;
+import java.util.UUID;
 
 /**
  * <p>
- *  前端控制器
+ * 前端控制器
  * </p>
  */
 @RestController
@@ -22,6 +30,9 @@ public class UserController {
 
     @Autowired
     private UserService userService;
+
+    @Autowired
+    private UsertokensService usertokensService;
 
     private final JwtTokenUtil jwtTokenUtil = new JwtTokenUtil();
 
@@ -33,7 +44,12 @@ public class UserController {
 
         User user = userService.getOne(queryWrapper);
         if (user != null) {
-            String token = jwtTokenUtil.generateToken(user);
+            String token = jwtTokenUtil.generateToken(user.getUsername());
+            Usertokens tokens = new Usertokens();
+            tokens.setUserId(user.getId());
+            tokens.setToken(token);
+            tokens.setExpiration(LocalDateTime.now().plusMinutes(30));
+            usertokensService.save(tokens);
             return ResponseData.success(token);
         } else {
             return ResponseData.failed(ResultCode.FAILED, "用户名或密码错误!");
@@ -45,10 +61,10 @@ public class UserController {
     public ResponseData<String> logout(HttpServletRequest request) {
         // 从请求头中获取 token
         String token = request.getHeader("Authorization");
-        if (token != null && token.startsWith("Bearer ")) {
-            // 删除缓存的 token
-            String authToken = token.substring(7);
-            // do something to delete token
+        if (token != null) {
+            QueryWrapper<Usertokens> queryWrapper = new QueryWrapper<>();
+            queryWrapper.eq("token", token);
+            usertokensService.remove(queryWrapper);
         }
         return ResponseData.success();
     }
@@ -86,13 +102,17 @@ public class UserController {
 
     @GetMapping("/info")
     public ResponseData<User> getInfo(HttpServletRequest httpServletRequest) {
-        String authHeader = httpServletRequest.getHeader("Authorization");
-        String token = authHeader.substring(7);
-        String username = jwtTokenUtil.getUsernameFromToken(token);
-        QueryWrapper<User> queryWrapper = new QueryWrapper<>();
-        queryWrapper.eq("username", username);
+        String token = httpServletRequest.getHeader("Authorization");
 
-        User user = userService.getOne(queryWrapper);
+        QueryWrapper<Usertokens> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq("token", token);
+
+        Usertokens one = usertokensService.getOne(queryWrapper);
+        if (one == null) {
+            return ResponseData.failed(ResultCode.UNAUTHORIZED);
+        }
+
+        User user = userService.getById(one.getUserId());
         if (user != null) {
             return ResponseData.success(user);
         } else {
@@ -120,5 +140,48 @@ public class UserController {
         }
         return ResponseData.success();
     }
+
+    @PostMapping("/upload")
+    public ResponseData<String> uploadImage(@RequestParam("file") MultipartFile file) {
+        try {
+            String fileName = UUID.randomUUID() + ".jpg";
+            File dest = new File("D:\\graduate\\project\\movie\\src\\main\\resources\\static\\images\\" + fileName);
+            file.transferTo(dest);
+            return ResponseData.success(fileName);
+        } catch (IOException e) {
+            e.printStackTrace();
+            return ResponseData.failed(ResultCode.FAILED, "图片上传失败");
+        }
+    }
+
+    @PostMapping("/update")
+    public ResponseData<String> updateUserInfo(@RequestBody User user, HttpServletRequest httpServletRequest) {
+        String token = httpServletRequest.getHeader("Authorization");
+
+        QueryWrapper<Usertokens> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq("token", token);
+
+        Usertokens one = usertokensService.getOne(queryWrapper);
+        if (one == null) {
+            return ResponseData.failed(ResultCode.UNAUTHORIZED);
+        }
+
+        User currentUser = userService.getById(one.getUserId());
+        if (currentUser != null) {
+            // 更新用户信息
+            BeanUtils.copyProperties(user, currentUser);
+
+            boolean result = userService.updateById(currentUser);
+            if (result) {
+                return ResponseData.success("用户信息修改成功");
+            } else {
+                return ResponseData.failed(ResultCode.FAILED, "用户信息修改失败");
+            }
+        } else {
+            return ResponseData.failed(ResultCode.UNAUTHORIZED, "用户不存在或已被删除");
+        }
+    }
+
+
 }
 

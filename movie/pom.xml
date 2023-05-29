@@ -154,8 +154,15 @@
                 </configuration>
             </plugin>
         </plugins>
+        <resources>
+            <resource>
+                <directory>src/main/resources</directory>
+                <excludes>
+                    <exclude>**/*.properties</exclude> <!-- 除了.properties文件外，其余文件不打入jar包 -->
+                </excludes>
+            </resource>
+        </resources>
     </build>
-
 
 
 </project>

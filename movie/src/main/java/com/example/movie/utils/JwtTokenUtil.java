@@ -1,9 +1,7 @@
 package com.example.movie.utils;
 
-import com.example.movie.entity.User;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import java.util.Date;
@@ -20,13 +18,14 @@ public class JwtTokenUtil {
 
     private static final long EXPIRATION_TIME = 24 * 60 * 60 * 1000L; // 24 hours
 
-    public String generateToken(User user) {
+    public String generateToken(String username) {
         Map<String, Object> claims = new HashMap<>();
-        claims.put("sub", user.getUsername());
+        claims.put("sub", username);
         claims.put("iat", new Date());
         claims.put("exp", new Date(System.currentTimeMillis() + EXPIRATION_TIME));
         return Jwts.builder().setClaims(claims).signWith(SignatureAlgorithm.HS512, secret).compact();
     }
+
 
     public String getUsernameFromToken(String token) {
         return Jwts.parser().setSigningKey(secret).parseClaimsJws(token).getBody().getSubject();

@@ -19,6 +19,6 @@ public class TestMethod {
     @Test
     public void Test() {
         JwtTokenUtil jwtTokenUtil = new JwtTokenUtil();
-        System.out.println("user1".equals(jwtTokenUtil.getUsernameFromToken(jwtTokenUtil.generateToken(userService.getOne(new QueryWrapper<User>().eq("username", "user1"))))));
+        System.out.println("user1".equals(jwtTokenUtil.getUsernameFromToken(jwtTokenUtil.generateToken(userService.getOne(new QueryWrapper<User>().eq("username", "user1")).getUsername()))));
     }
 }
